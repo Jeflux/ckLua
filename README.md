@@ -13,7 +13,7 @@ I have supplied example scripts to show how both scripts and key map files are s
 This program uses the library from https://github.com/Palmr/LibCorsairRGB, and therefore libusb. Other than this you need Lua installed on your system to build.
 
 ## How to use
-I have supplied a project for Visual Studio, since i found it finicky to setup C++/CLI from scratch. If you know how to setup for C++/CLI, I am sure you know how to include libraries. The project can be found [here](_misc)
+The program uses C++/CLI. So you need to compile with /clr and /SUBSYSTEM:WINDOWS flags. You also need to include libusb, LibCorsairRGB and Lua.
 
 As mentioned by Palmr, you may have to install drivers for libusb to get this program to work. See here for information on how to set up the libusb drivers for windows: https://github.com/libusb/libusb/wiki/Windows#Driver_Installation.
 
