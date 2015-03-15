@@ -5,7 +5,6 @@
 #include <iostream>
 #include <sstream>
 #include <msclr\marshal_cppstd.h>
-#include "utils.h"
 
 using namespace System;
 using namespace System::ComponentModel;
@@ -51,28 +50,23 @@ private: System::ComponentModel::IContainer^  components;
 protected:
 
 // Form components
-private: System::Windows::Forms::RichTextBox^	txtOutput;
-private: System::Windows::Forms::Label^			lblOutput;
-private: System::Windows::Forms::Button^		btnClearConsole;
-private: System::Windows::Forms::ComboBox^		cbScripts;
-private: System::Windows::Forms::Label^			lblScript;
-
-private: System::Windows::Forms::Button^		btnReloadScript;
-private: System::Windows::Forms::Label^			lblKeyConfig;
-private: System::Windows::Forms::ComboBox^		cbKeyConfig;
-
-private: System::Windows::Forms::Button^		btnReloadConfig;
-
-private: System::Windows::Forms::CheckBox^		chkPause;
-private: System::Windows::Forms::ContextMenuStrip^  menuTray;
-private: System::Windows::Forms::NotifyIcon^  minimizeIcon;
-private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
-private: System::Windows::Forms::ToolStripMenuItem^  restoreToolStripMenuItem;
-private: System::Windows::Forms::ToolStripMenuItem^  notifyScriptMenu;
-private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator1;
-
-
-private: System::Windows::Forms::Timer^			updateTimer;
+private: System::Windows::Forms::RichTextBox^			txtOutput;
+private: System::Windows::Forms::Label^					lblOutput;
+private: System::Windows::Forms::Button^				btnClearConsole;
+private: System::Windows::Forms::ComboBox^				cbScripts;
+private: System::Windows::Forms::Label^					lblScript;
+private: System::Windows::Forms::Button^				btnReloadScript;
+private: System::Windows::Forms::Label^					lblKeyConfig;
+private: System::Windows::Forms::ComboBox^				cbKeyConfig;
+private: System::Windows::Forms::Button^				btnReloadConfig;
+private: System::Windows::Forms::CheckBox^				chkPause;
+private: System::Windows::Forms::ContextMenuStrip^		menuTray;
+private: System::Windows::Forms::NotifyIcon^			minimizeIcon;
+private: System::Windows::Forms::ToolStripMenuItem^		exitToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^		restoreToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^		notifyScriptMenu;
+private: System::Windows::Forms::ToolStripSeparator^	toolStripSeparator1;
+private: System::Windows::Forms::Timer^					updateTimer;
 
 	// Initialize components
 	void InitializeComponent(void){
@@ -232,7 +226,7 @@ private: System::Windows::Forms::Timer^			updateTimer;
 		// 
 		this->minimizeIcon->ContextMenuStrip = this->menuTray;
 		this->minimizeIcon->Text = L"NotifyIcon";
-		this->minimizeIcon->Visible = true;
+		this->minimizeIcon->Visible = false;
 		this->minimizeIcon->DoubleClick += gcnew System::EventHandler(this, &MainForm::minimizeIcon_DoubleClick);
 		this->minimizeIcon->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::minimizeIcon_MouseClick);
 		// 
