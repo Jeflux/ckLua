@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include "MainForm.h"
 
+
 int WINAPI WinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine,
@@ -28,7 +29,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		std::cout << GetLastError() << std::endl;
 	}
 
-	Application::Run();
+	lua.run();
+	//Application::Run();
 
 	return 0;
 }

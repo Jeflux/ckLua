@@ -37,7 +37,7 @@ int _luaPrint(lua_State* L) {
 				std::cout << '\t';
 		}
 	}
-
+	lua_pop(L, nargs);
 	std::cout << std::endl;
 	return 0;
 }

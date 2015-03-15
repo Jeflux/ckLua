@@ -18,7 +18,7 @@ using namespace System::Drawing;
 public ref class MainForm : public System::Windows::Forms::Form
 {
 public:
-	MainForm(ckLua* lua, std::ostringstream* out) {
+	MainForm(ckLua* lua, std::ostringstream* out) : minimizedFirstTime(true) {
 		InitializeComponent();
 		this->Show();
 
@@ -30,6 +30,14 @@ public:
 
 		loadSelectedKeymap();
 		loadSelectedScript();
+
+		System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MainForm::typeid));
+		this->Icon = gcnew System::Drawing::Icon(L"..\\icon.ico");
+		this->minimizeIcon->Icon = gcnew System::Drawing::Icon(L"..\\icon.ico");
+	}
+
+private:
+	System::Void MainForm_Shown(System::Object^  sender, System::EventArgs^  e) {
 	}
 
 protected:
@@ -56,6 +64,14 @@ private: System::Windows::Forms::ComboBox^		cbKeyConfig;
 private: System::Windows::Forms::Button^		btnReloadConfig;
 
 private: System::Windows::Forms::CheckBox^		chkPause;
+private: System::Windows::Forms::ContextMenuStrip^  menuTray;
+private: System::Windows::Forms::NotifyIcon^  minimizeIcon;
+private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^  restoreToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^  notifyScriptMenu;
+private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator1;
+
+
 private: System::Windows::Forms::Timer^			updateTimer;
 
 	// Initialize components
@@ -72,6 +88,13 @@ private: System::Windows::Forms::Timer^			updateTimer;
 		this->btnReloadConfig = (gcnew System::Windows::Forms::Button());
 		this->updateTimer = (gcnew System::Windows::Forms::Timer(this->components));
 		this->chkPause = (gcnew System::Windows::Forms::CheckBox());
+		this->menuTray = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+		this->notifyScriptMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->restoreToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->minimizeIcon = (gcnew System::Windows::Forms::NotifyIcon(this->components));
+		this->toolStripSeparator1 = (gcnew System::Windows::Forms::ToolStripSeparator());
+		this->menuTray->SuspendLayout();
 		this->SuspendLayout();
 		// 
 		// txtOutput
@@ -177,6 +200,47 @@ private: System::Windows::Forms::Timer^			updateTimer;
 		this->chkPause->Text = L"Pause";
 		this->chkPause->UseVisualStyleBackColor = true;
 		// 
+		// menuTray
+		// 
+		this->menuTray->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
+			this->restoreToolStripMenuItem,
+				this->notifyScriptMenu, this->toolStripSeparator1, this->exitToolStripMenuItem
+		});
+		this->menuTray->Name = L"menuTray";
+		this->menuTray->Size = System::Drawing::Size(153, 98);
+		// 
+		// notifyScriptMenu
+		// 
+		this->notifyScriptMenu->Name = L"notifyScriptMenu";
+		this->notifyScriptMenu->Size = System::Drawing::Size(152, 22);
+		this->notifyScriptMenu->Text = L"Change Script";
+		// 
+		// restoreToolStripMenuItem
+		// 
+		this->restoreToolStripMenuItem->Name = L"restoreToolStripMenuItem";
+		this->restoreToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+		this->restoreToolStripMenuItem->Text = L"Restore";
+		// 
+		// exitToolStripMenuItem
+		// 
+		this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
+		this->exitToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+		this->exitToolStripMenuItem->Text = L"Exit";
+		this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
+		// 
+		// minimizeIcon
+		// 
+		this->minimizeIcon->ContextMenuStrip = this->menuTray;
+		this->minimizeIcon->Text = L"NotifyIcon";
+		this->minimizeIcon->Visible = true;
+		this->minimizeIcon->DoubleClick += gcnew System::EventHandler(this, &MainForm::minimizeIcon_DoubleClick);
+		this->minimizeIcon->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::minimizeIcon_MouseClick);
+		// 
+		// toolStripSeparator1
+		// 
+		this->toolStripSeparator1->Name = L"toolStripSeparator1";
+		this->toolStripSeparator1->Size = System::Drawing::Size(149, 6);
+		// 
 		// MainForm
 		// 
 		this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -198,15 +262,18 @@ private: System::Windows::Forms::Timer^			updateTimer;
 		this->Text = L"CKLua";
 		this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &MainForm::formClosed);
 		this->Shown += gcnew System::EventHandler(this, &MainForm::MainForm_Shown);
+		this->SizeChanged += gcnew System::EventHandler(this, &MainForm::MainForm_SizeChanged);
+		this->menuTray->ResumeLayout(false);
 		this->ResumeLayout(false);
 		this->PerformLayout();
 
 	}
 	
 
-	// Private pointers
+	// Private members
 	ckLua* lua;
 	std::ostringstream* out;
+	bool minimizedFirstTime;
 
 private:
 
@@ -239,8 +306,15 @@ private:
 	void populateComboBoxes() {
 		WIN32_FIND_DATA data;
 		populateComboBoxesHelper(this->cbScripts, L"scripts/*.lua", data);
-		if (cbScripts->Items->Count > 0)
+		for each (auto var in this->cbScripts->Items){
+			ToolStripMenuItem^ child = gcnew ToolStripMenuItem(var->ToString());
+			child->Click += gcnew EventHandler(this, &MainForm::scriptMenu_Click);
+			notifyScriptMenu->DropDownItems->Add(child);
+		}
+
+		if (cbScripts->Items->Count > 0) {
 			cbScripts->SelectedIndex = 0;
+		}
 
 		populateComboBoxesHelper(this->cbKeyConfig, L"keymaps/*.keyconf", data);
 		if (cbKeyConfig->Items->Count > 0)
@@ -299,8 +373,59 @@ private:
 	System::Void btnReloadConfig_Click(System::Object^  sender, System::EventArgs^  e) {
 		loadSelectedKeymap();
 	}
-	System::Void MainForm_Shown(System::Object^  sender, System::EventArgs^  e) {
-		// Run lua scripts when fully loaded
-		lua->run();
+	
+	// Used for minimizing to tray
+	System::Void MainForm_SizeChanged(System::Object^  sender, System::EventArgs^  e) {
+		if (this->WindowState == FormWindowState::Minimized) {
+			this->minimizeIcon->Visible = true;
+
+			if (minimizedFirstTime) {
+				this->minimizeIcon->ShowBalloonTip(500, L"ckLua", L"Program is still running", ToolTipIcon::Info);
+				minimizedFirstTime = false;
+			}
+
+			this->ShowInTaskbar = false;
+			this->Hide();
+		}
+		else if (this->WindowState == FormWindowState::Normal) {
+			this->minimizeIcon->Visible = false;
+			this->ShowInTaskbar = true;
+		}
+	}
+	System::Void minimizeIcon_DoubleClick(System::Object^  sender, System::EventArgs^  e) {
+		System::Windows::Forms::MouseEventArgs^ ee = (System::Windows::Forms::MouseEventArgs^)e;
+		switch (ee->Button)
+		{
+		case ::MouseButtons::Left:
+			this->Show();
+			this->WindowState = FormWindowState::Normal;
+			break;
+		}
+
+		
+	}
+
+	// Used to display context menu
+	System::Void minimizeIcon_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+		switch (e->Button)
+		{
+		case ::MouseButtons::Right:
+			minimizeIcon->ContextMenuStrip->Show();
+			break;
+		}
+	}
+	
+	
+	// Context menu
+	System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		Application::Exit();
+	}
+
+	// Change script from context menu
+	System::Void scriptMenu_Click(System::Object^  sender, System::EventArgs^  e) {
+		String^ fileName = "scripts/";
+		fileName = String::Concat(fileName, sender->ToString());
+
+		lua->changeScript(msclr::interop::marshal_as<std::string>(fileName));
 	}
 };
