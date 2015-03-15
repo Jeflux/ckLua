@@ -79,7 +79,6 @@ function update(dt)
 end
 
 function keyDown(vkcode, x, y, key)
-print(key)
 	if excludekeys[key] == true then return end
 
 	local xx = math.floor(x + 0.5)
