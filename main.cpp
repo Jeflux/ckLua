@@ -20,18 +20,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	ckLua lua = ckLua();
 	MainForm^ controller = gcnew MainForm(&lua, &out);
 
-
-	/*RAWINPUTDEVICE device;
-	device.usUsagePage = 0x01;
-	device.usUsage = 0x06;
-	device.dwFlags = RIDEV_INPUTSINK;
-	device.hwndTarget = GetActiveWindow();
-	if (RegisterRawInputDevices(&device, 1, sizeof(device)) == FALSE){
-		std::cout << GetLastError() << std::endl;
-	}*/
-
+	// Run "main loop"
 	lua.run();
-	//Application::Run();
 
 	return 0;
 }

@@ -76,9 +76,9 @@ void ckLua::kill() {
 }
 
 void ckLua::run(bool lowLevelHook) {
-	// Only hook if low level
-	if (lowLevelHook)
-		inputListener.hook();
+	// Only hook if low level. Not used, keeping for reference
+	/*if (lowLevelHook)
+		inputListener.hook();*/ 
 
 
 	while (!terminate) {
@@ -118,9 +118,9 @@ void ckLua::run(bool lowLevelHook) {
 		}
 	}
 
-	// Cleanly unhook listener
-	if (lowLevelHook)
-		inputListener.unhook();
+	// Cleanly unhook listener. Not used, keeping for reference
+	/*if (lowLevelHook)
+		inputListener.unhook();*/
 }
 
 // Check if time to update

@@ -36,9 +36,11 @@ public:
 	}
 
 private:
+	// When fully loaded
 	System::Void MainForm_Shown(System::Object^  sender, System::EventArgs^  e) {
 		changeInputDevice(false);
 	}
+
 
 protected:
 	~MainForm(){
@@ -46,6 +48,7 @@ protected:
 			delete components;
 		}
 	}
+
 
 private: System::ComponentModel::IContainer^  components;
 protected:
@@ -67,17 +70,15 @@ private: System::Windows::Forms::ToolStripMenuItem^		exitToolStripMenuItem;
 private: System::Windows::Forms::ToolStripMenuItem^		restoreToolStripMenuItem;
 private: System::Windows::Forms::ToolStripMenuItem^		notifyScriptMenu;
 private: System::Windows::Forms::ToolStripSeparator^	toolStripSeparator1;
-private: System::Windows::Forms::MenuStrip^  menuStrip1;
-private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
-private: System::Windows::Forms::ToolStripMenuItem^  openToolStripMenuItem;
-private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator3;
-private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem1;
-private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
-private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem;
-private: System::Windows::Forms::Button^  btnBrowseScript;
-private: System::Windows::Forms::Button^  btnBrowseKeyconfig;
-private: System::Windows::Forms::Label^  lblCustomScript;
-private: System::Windows::Forms::Label^  lblCustomKeyConfig;
+private: System::Windows::Forms::MenuStrip^				menuStrip1;
+private: System::Windows::Forms::ToolStripMenuItem^		fileToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^		openToolStripMenuItem;
+private: System::Windows::Forms::ToolStripSeparator^	toolStripSeparator3;
+private: System::Windows::Forms::ToolStripMenuItem^		exitToolStripMenuItem1;
+private: System::Windows::Forms::Button^				btnBrowseScript;
+private: System::Windows::Forms::Button^				btnBrowseKeyconfig;
+private: System::Windows::Forms::Label^					lblCustomScript;
+private: System::Windows::Forms::Label^					lblCustomKeyConfig;
 private: System::Windows::Forms::Timer^					updateTimer;
 
 	// Initialize components
@@ -105,8 +106,6 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->toolStripSeparator3 = (gcnew System::Windows::Forms::ToolStripSeparator());
 		this->exitToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
-		this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-		this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->btnBrowseScript = (gcnew System::Windows::Forms::Button());
 		this->btnBrowseKeyconfig = (gcnew System::Windows::Forms::Button());
 		this->lblCustomScript = (gcnew System::Windows::Forms::Label());
@@ -226,31 +225,32 @@ private: System::Windows::Forms::Timer^					updateTimer;
 				this->notifyScriptMenu, this->toolStripSeparator1, this->exitToolStripMenuItem
 		});
 		this->menuTray->Name = L"menuTray";
-		this->menuTray->Size = System::Drawing::Size(139, 76);
+		this->menuTray->Size = System::Drawing::Size(153, 98);
 		// 
 		// restoreToolStripMenuItem
 		// 
 		this->restoreToolStripMenuItem->Name = L"restoreToolStripMenuItem";
-		this->restoreToolStripMenuItem->Size = System::Drawing::Size(138, 22);
+		this->restoreToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 		this->restoreToolStripMenuItem->Text = L"Restore";
+		this->restoreToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::restoreToolStripMenuItem_Click);
 		// 
 		// notifyScriptMenu
 		// 
 		this->notifyScriptMenu->Name = L"notifyScriptMenu";
-		this->notifyScriptMenu->Size = System::Drawing::Size(138, 22);
+		this->notifyScriptMenu->Size = System::Drawing::Size(152, 22);
 		this->notifyScriptMenu->Text = L"Change Script";
 		// 
 		// toolStripSeparator1
 		// 
 		this->toolStripSeparator1->Name = L"toolStripSeparator1";
-		this->toolStripSeparator1->Size = System::Drawing::Size(135, 6);
+		this->toolStripSeparator1->Size = System::Drawing::Size(149, 6);
 		// 
 		// exitToolStripMenuItem
 		// 
 		this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-		this->exitToolStripMenuItem->Size = System::Drawing::Size(138, 22);
+		this->exitToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 		this->exitToolStripMenuItem->Text = L"Exit";
-		this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
+		this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitEventHandler);
 		// 
 		// minimizeIcon
 		// 
@@ -261,10 +261,7 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// 
 		// menuStrip1
 		// 
-		this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
-			this->fileToolStripMenuItem,
-				this->helpToolStripMenuItem
-		});
+		this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileToolStripMenuItem });
 		this->menuStrip1->Location = System::Drawing::Point(0, 0);
 		this->menuStrip1->Name = L"menuStrip1";
 		this->menuStrip1->Size = System::Drawing::Size(412, 24);
@@ -300,20 +297,7 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		this->exitToolStripMenuItem1->Name = L"exitToolStripMenuItem1";
 		this->exitToolStripMenuItem1->Size = System::Drawing::Size(135, 22);
 		this->exitToolStripMenuItem1->Text = L"E&xit";
-		this->exitToolStripMenuItem1->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
-		// 
-		// helpToolStripMenuItem
-		// 
-		this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->aboutToolStripMenuItem });
-		this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
-		this->helpToolStripMenuItem->Size = System::Drawing::Size(41, 20);
-		this->helpToolStripMenuItem->Text = L"&Help";
-		// 
-		// aboutToolStripMenuItem
-		// 
-		this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
-		this->aboutToolStripMenuItem->Size = System::Drawing::Size(111, 22);
-		this->aboutToolStripMenuItem->Text = L"&About...";
+		this->exitToolStripMenuItem1->Click += gcnew System::EventHandler(this, &MainForm::exitEventHandler);
 		// 
 		// btnBrowseScript
 		// 
@@ -480,6 +464,7 @@ private:
 			txtOutput->ScrollToCaret(); //Now scroll it automatically
 		}
 		
+		// Clear buffer
 		out->clear();
 		out->str("");
 	}
@@ -523,6 +508,8 @@ private:
 			changeInputDevice(false);
 		}
 	}
+
+	// Restore application when double clicking tray icon
 	System::Void minimizeIcon_DoubleClick(System::Object^  sender, System::EventArgs^  e) {
 		System::Windows::Forms::MouseEventArgs^ ee = (System::Windows::Forms::MouseEventArgs^)e;
 		switch (ee->Button)
@@ -532,9 +519,13 @@ private:
 			this->WindowState = FormWindowState::Normal;
 			break;
 		}
-
-		
 	}
+	// Restore application when clicking restore
+	System::Void restoreToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		this->Show();
+		this->WindowState = FormWindowState::Normal;
+	}
+
 
 	// Used to display context menu
 	System::Void minimizeIcon_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
@@ -547,8 +538,8 @@ private:
 	}
 	
 	
-	// Context menu
-	System::Void exitToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	// Handle events that want to exit program
+	System::Void exitEventHandler(System::Object^  sender, System::EventArgs^  e) {
 		Application::Exit();
 	}
 
@@ -560,18 +551,18 @@ private:
 		lua->changeScript(msclr::interop::marshal_as<std::string>(fileName));
 	}
 	
+	// For opening different files
 	System::Void scriptOpenEventHandler(System::Object^  sender, System::EventArgs^  e) {
 		openFile(L"Lua Files (*.lua)|*.lua");
 	}
-
 	System::Void keyConfigOpenEventHandler(System::Object^  sender, System::EventArgs^  e) {
 		openFile(L"Keymap Files (*.keyconf)|*.keyconf");
 	}
-
 	System::Void fileOpenEventHandler(System::Object^  sender, System::EventArgs^  e) {
 		openFile(L"Lua Files (*.lua)|*.lua|Keymap Files (*.keyconf)|*.keyconf");
 	}
 
+	// Open file
 	void openFile(String^ filter) {
 		OpenFileDialog^ fileDialog = gcnew OpenFileDialog();
 		fileDialog->Filter = filter;
@@ -605,6 +596,8 @@ private:
 	}
 
 
+	// Registering raw input device for listening.
+	// Use this when minimizing and restoring to update device handle. This way, input is still being read when window state is changing
 	void changeInputDevice(bool remove) {
 		RAWINPUTDEVICE device;
 		device.usUsagePage = 0x01;
@@ -616,7 +609,7 @@ private:
 		
 		device.hwndTarget = (HWND) this->Handle.ToPointer();
 		if (RegisterRawInputDevices(&device, 1, sizeof(device)) == FALSE){
-			std::cout << GetLastError() << std::endl;
+			//std::cout << GetLastError() << std::endl;
 		}
 	}
 };
