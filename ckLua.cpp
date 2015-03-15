@@ -54,17 +54,6 @@ ckLua::ckLua():
 	altgrup(false) {
 	context = this;
 
-	L = lua_open();
-	luaL_openlibs(L);
-
-	// Register global callbacks
-	lua_register(L, "setLed", _setLed);
-	lua_register(L, "setUPS", _setUPS);
-	lua_register(L, "loadKeymap", _setKeymap);
-	lua_register(L, "loadScript", _setScript);
-	lua_register(L, "print", _luaPrint);
-	lua_atpanic(L, _luaPanic);
-
 	lastUpdateTime = std::clock();
 
 	// Create listener
@@ -119,12 +108,12 @@ void ckLua::run(bool lowLevelHook) {
 		{
 			while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
 			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+
 				// Only intercept if not low level
 				if (!lowLevelHook)
 					inputListener.interceptMessage(msg);
-
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
 			}
 		}
 	}
@@ -174,6 +163,20 @@ void ckLua::keyUpCallback(int key, int flags) {
 }
 
 void ckLua::changeScript(const std::string& fileName) {
+	// Reopen state if needed
+	if (L)
+		lua_close(L);
+	L = lua_open();
+	luaL_openlibs(L);
+
+	// Register global callbacks
+	lua_register(L, "setLed", _setLed);
+	lua_register(L, "setUPS", _setUPS);
+	lua_register(L, "loadKeymap", _setKeymap);
+	lua_register(L, "loadScript", _setScript);
+	lua_register(L, "print", _luaPrint);
+	lua_atpanic(L, _luaPanic);
+
 	luaError = false;
 
 	setjmp(jumpBuf);

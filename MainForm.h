@@ -37,6 +37,7 @@ public:
 
 private:
 	System::Void MainForm_Shown(System::Object^  sender, System::EventArgs^  e) {
+		changeInputDevice(false);
 	}
 
 protected:
@@ -66,6 +67,17 @@ private: System::Windows::Forms::ToolStripMenuItem^		exitToolStripMenuItem;
 private: System::Windows::Forms::ToolStripMenuItem^		restoreToolStripMenuItem;
 private: System::Windows::Forms::ToolStripMenuItem^		notifyScriptMenu;
 private: System::Windows::Forms::ToolStripSeparator^	toolStripSeparator1;
+private: System::Windows::Forms::MenuStrip^  menuStrip1;
+private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^  openToolStripMenuItem;
+private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator3;
+private: System::Windows::Forms::ToolStripMenuItem^  exitToolStripMenuItem1;
+private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^  aboutToolStripMenuItem;
+private: System::Windows::Forms::Button^  btnBrowseScript;
+private: System::Windows::Forms::Button^  btnBrowseKeyconfig;
+private: System::Windows::Forms::Label^  lblCustomScript;
+private: System::Windows::Forms::Label^  lblCustomKeyConfig;
 private: System::Windows::Forms::Timer^					updateTimer;
 
 	// Initialize components
@@ -83,12 +95,24 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		this->updateTimer = (gcnew System::Windows::Forms::Timer(this->components));
 		this->chkPause = (gcnew System::Windows::Forms::CheckBox());
 		this->menuTray = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
-		this->notifyScriptMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->restoreToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->notifyScriptMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->toolStripSeparator1 = (gcnew System::Windows::Forms::ToolStripSeparator());
 		this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->minimizeIcon = (gcnew System::Windows::Forms::NotifyIcon(this->components));
-		this->toolStripSeparator1 = (gcnew System::Windows::Forms::ToolStripSeparator());
+		this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
+		this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->openToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->toolStripSeparator3 = (gcnew System::Windows::Forms::ToolStripSeparator());
+		this->exitToolStripMenuItem1 = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->aboutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->btnBrowseScript = (gcnew System::Windows::Forms::Button());
+		this->btnBrowseKeyconfig = (gcnew System::Windows::Forms::Button());
+		this->lblCustomScript = (gcnew System::Windows::Forms::Label());
+		this->lblCustomKeyConfig = (gcnew System::Windows::Forms::Label());
 		this->menuTray->SuspendLayout();
+		this->menuStrip1->SuspendLayout();
 		this->SuspendLayout();
 		// 
 		// txtOutput
@@ -96,20 +120,21 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		this->txtOutput->BackColor = System::Drawing::SystemColors::Desktop;
 		this->txtOutput->Cursor = System::Windows::Forms::Cursors::Arrow;
 		this->txtOutput->ForeColor = System::Drawing::SystemColors::Window;
-		this->txtOutput->Location = System::Drawing::Point(15, 172);
+		this->txtOutput->Location = System::Drawing::Point(15, 202);
 		this->txtOutput->Name = L"txtOutput";
 		this->txtOutput->ReadOnly = true;
 		this->txtOutput->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::ForcedVertical;
 		this->txtOutput->Size = System::Drawing::Size(382, 246);
 		this->txtOutput->TabIndex = 4;
 		this->txtOutput->Text = L"";
+		this->txtOutput->TextChanged += gcnew System::EventHandler(this, &MainForm::txtOutput_TextChanged);
 		// 
 		// lblOutput
 		// 
 		this->lblOutput->AutoSize = true;
 		this->lblOutput->BackColor = System::Drawing::SystemColors::Control;
 		this->lblOutput->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		this->lblOutput->Location = System::Drawing::Point(12, 156);
+		this->lblOutput->Location = System::Drawing::Point(12, 186);
 		this->lblOutput->Name = L"lblOutput";
 		this->lblOutput->Size = System::Drawing::Size(42, 13);
 		this->lblOutput->TabIndex = 1;
@@ -117,7 +142,7 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// 
 		// btnClearConsole
 		// 
-		this->btnClearConsole->Location = System::Drawing::Point(306, 393);
+		this->btnClearConsole->Location = System::Drawing::Point(306, 423);
 		this->btnClearConsole->Name = L"btnClearConsole";
 		this->btnClearConsole->Size = System::Drawing::Size(75, 23);
 		this->btnClearConsole->TabIndex = 2;
@@ -128,7 +153,7 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// cbScripts
 		// 
 		this->cbScripts->FormattingEnabled = true;
-		this->cbScripts->Location = System::Drawing::Point(15, 25);
+		this->cbScripts->Location = System::Drawing::Point(15, 40);
 		this->cbScripts->Name = L"cbScripts";
 		this->cbScripts->Size = System::Drawing::Size(301, 21);
 		this->cbScripts->TabIndex = 5;
@@ -136,7 +161,7 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// lblScript
 		// 
 		this->lblScript->AutoSize = true;
-		this->lblScript->Location = System::Drawing::Point(12, 9);
+		this->lblScript->Location = System::Drawing::Point(12, 24);
 		this->lblScript->Name = L"lblScript";
 		this->lblScript->Size = System::Drawing::Size(37, 13);
 		this->lblScript->TabIndex = 6;
@@ -144,7 +169,7 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// 
 		// btnReloadScript
 		// 
-		this->btnReloadScript->Location = System::Drawing::Point(322, 23);
+		this->btnReloadScript->Location = System::Drawing::Point(322, 38);
 		this->btnReloadScript->Name = L"btnReloadScript";
 		this->btnReloadScript->Size = System::Drawing::Size(75, 23);
 		this->btnReloadScript->TabIndex = 8;
@@ -155,7 +180,7 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// lblKeyConfig
 		// 
 		this->lblKeyConfig->AutoSize = true;
-		this->lblKeyConfig->Location = System::Drawing::Point(12, 69);
+		this->lblKeyConfig->Location = System::Drawing::Point(12, 95);
 		this->lblKeyConfig->Name = L"lblKeyConfig";
 		this->lblKeyConfig->Size = System::Drawing::Size(61, 13);
 		this->lblKeyConfig->TabIndex = 9;
@@ -164,14 +189,14 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// cbKeyConfig
 		// 
 		this->cbKeyConfig->FormattingEnabled = true;
-		this->cbKeyConfig->Location = System::Drawing::Point(15, 85);
+		this->cbKeyConfig->Location = System::Drawing::Point(15, 116);
 		this->cbKeyConfig->Name = L"cbKeyConfig";
 		this->cbKeyConfig->Size = System::Drawing::Size(301, 21);
 		this->cbKeyConfig->TabIndex = 10;
 		// 
 		// btnReloadConfig
 		// 
-		this->btnReloadConfig->Location = System::Drawing::Point(322, 83);
+		this->btnReloadConfig->Location = System::Drawing::Point(322, 114);
 		this->btnReloadConfig->Name = L"btnReloadConfig";
 		this->btnReloadConfig->Size = System::Drawing::Size(75, 23);
 		this->btnReloadConfig->TabIndex = 12;
@@ -187,7 +212,7 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// chkPause
 		// 
 		this->chkPause->AutoSize = true;
-		this->chkPause->Location = System::Drawing::Point(341, 155);
+		this->chkPause->Location = System::Drawing::Point(341, 185);
 		this->chkPause->Name = L"chkPause";
 		this->chkPause->Size = System::Drawing::Size(56, 17);
 		this->chkPause->TabIndex = 13;
@@ -201,24 +226,29 @@ private: System::Windows::Forms::Timer^					updateTimer;
 				this->notifyScriptMenu, this->toolStripSeparator1, this->exitToolStripMenuItem
 		});
 		this->menuTray->Name = L"menuTray";
-		this->menuTray->Size = System::Drawing::Size(153, 98);
-		// 
-		// notifyScriptMenu
-		// 
-		this->notifyScriptMenu->Name = L"notifyScriptMenu";
-		this->notifyScriptMenu->Size = System::Drawing::Size(152, 22);
-		this->notifyScriptMenu->Text = L"Change Script";
+		this->menuTray->Size = System::Drawing::Size(139, 76);
 		// 
 		// restoreToolStripMenuItem
 		// 
 		this->restoreToolStripMenuItem->Name = L"restoreToolStripMenuItem";
-		this->restoreToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+		this->restoreToolStripMenuItem->Size = System::Drawing::Size(138, 22);
 		this->restoreToolStripMenuItem->Text = L"Restore";
+		// 
+		// notifyScriptMenu
+		// 
+		this->notifyScriptMenu->Name = L"notifyScriptMenu";
+		this->notifyScriptMenu->Size = System::Drawing::Size(138, 22);
+		this->notifyScriptMenu->Text = L"Change Script";
+		// 
+		// toolStripSeparator1
+		// 
+		this->toolStripSeparator1->Name = L"toolStripSeparator1";
+		this->toolStripSeparator1->Size = System::Drawing::Size(135, 6);
 		// 
 		// exitToolStripMenuItem
 		// 
 		this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-		this->exitToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+		this->exitToolStripMenuItem->Size = System::Drawing::Size(138, 22);
 		this->exitToolStripMenuItem->Text = L"Exit";
 		this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
 		// 
@@ -226,20 +256,111 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// 
 		this->minimizeIcon->ContextMenuStrip = this->menuTray;
 		this->minimizeIcon->Text = L"NotifyIcon";
-		this->minimizeIcon->Visible = false;
 		this->minimizeIcon->DoubleClick += gcnew System::EventHandler(this, &MainForm::minimizeIcon_DoubleClick);
 		this->minimizeIcon->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::minimizeIcon_MouseClick);
 		// 
-		// toolStripSeparator1
+		// menuStrip1
 		// 
-		this->toolStripSeparator1->Name = L"toolStripSeparator1";
-		this->toolStripSeparator1->Size = System::Drawing::Size(149, 6);
+		this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->fileToolStripMenuItem,
+				this->helpToolStripMenuItem
+		});
+		this->menuStrip1->Location = System::Drawing::Point(0, 0);
+		this->menuStrip1->Name = L"menuStrip1";
+		this->menuStrip1->Size = System::Drawing::Size(412, 24);
+		this->menuStrip1->TabIndex = 14;
+		this->menuStrip1->Text = L"menuStrip1";
+		// 
+		// fileToolStripMenuItem
+		// 
+		this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->openToolStripMenuItem,
+				this->toolStripSeparator3, this->exitToolStripMenuItem1
+		});
+		this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
+		this->fileToolStripMenuItem->Size = System::Drawing::Size(36, 20);
+		this->fileToolStripMenuItem->Text = L"&File";
+		// 
+		// openToolStripMenuItem
+		// 
+		this->openToolStripMenuItem->ImageTransparentColor = System::Drawing::Color::Magenta;
+		this->openToolStripMenuItem->Name = L"openToolStripMenuItem";
+		this->openToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::O));
+		this->openToolStripMenuItem->Size = System::Drawing::Size(135, 22);
+		this->openToolStripMenuItem->Text = L"&Open";
+		this->openToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::fileOpenEventHandler);
+		// 
+		// toolStripSeparator3
+		// 
+		this->toolStripSeparator3->Name = L"toolStripSeparator3";
+		this->toolStripSeparator3->Size = System::Drawing::Size(132, 6);
+		// 
+		// exitToolStripMenuItem1
+		// 
+		this->exitToolStripMenuItem1->Name = L"exitToolStripMenuItem1";
+		this->exitToolStripMenuItem1->Size = System::Drawing::Size(135, 22);
+		this->exitToolStripMenuItem1->Text = L"E&xit";
+		this->exitToolStripMenuItem1->Click += gcnew System::EventHandler(this, &MainForm::exitToolStripMenuItem_Click);
+		// 
+		// helpToolStripMenuItem
+		// 
+		this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->aboutToolStripMenuItem });
+		this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
+		this->helpToolStripMenuItem->Size = System::Drawing::Size(41, 20);
+		this->helpToolStripMenuItem->Text = L"&Help";
+		// 
+		// aboutToolStripMenuItem
+		// 
+		this->aboutToolStripMenuItem->Name = L"aboutToolStripMenuItem";
+		this->aboutToolStripMenuItem->Size = System::Drawing::Size(111, 22);
+		this->aboutToolStripMenuItem->Text = L"&About...";
+		// 
+		// btnBrowseScript
+		// 
+		this->btnBrowseScript->Location = System::Drawing::Point(322, 67);
+		this->btnBrowseScript->Name = L"btnBrowseScript";
+		this->btnBrowseScript->Size = System::Drawing::Size(75, 23);
+		this->btnBrowseScript->TabIndex = 15;
+		this->btnBrowseScript->Text = L"Browse";
+		this->btnBrowseScript->UseVisualStyleBackColor = true;
+		this->btnBrowseScript->Click += gcnew System::EventHandler(this, &MainForm::scriptOpenEventHandler);
+		// 
+		// btnBrowseKeyconfig
+		// 
+		this->btnBrowseKeyconfig->Location = System::Drawing::Point(322, 143);
+		this->btnBrowseKeyconfig->Name = L"btnBrowseKeyconfig";
+		this->btnBrowseKeyconfig->Size = System::Drawing::Size(75, 23);
+		this->btnBrowseKeyconfig->TabIndex = 16;
+		this->btnBrowseKeyconfig->Text = L"Browse";
+		this->btnBrowseKeyconfig->UseVisualStyleBackColor = true;
+		this->btnBrowseKeyconfig->Click += gcnew System::EventHandler(this, &MainForm::keyConfigOpenEventHandler);
+		// 
+		// lblCustomScript
+		// 
+		this->lblCustomScript->AutoSize = true;
+		this->lblCustomScript->Location = System::Drawing::Point(12, 66);
+		this->lblCustomScript->Name = L"lblCustomScript";
+		this->lblCustomScript->Size = System::Drawing::Size(0, 13);
+		this->lblCustomScript->TabIndex = 17;
+		// 
+		// lblCustomKeyConfig
+		// 
+		this->lblCustomKeyConfig->AutoSize = true;
+		this->lblCustomKeyConfig->Location = System::Drawing::Point(12, 142);
+		this->lblCustomKeyConfig->Name = L"lblCustomKeyConfig";
+		this->lblCustomKeyConfig->Size = System::Drawing::Size(0, 13);
+		this->lblCustomKeyConfig->TabIndex = 18;
 		// 
 		// MainForm
 		// 
 		this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 		this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-		this->ClientSize = System::Drawing::Size(412, 430);
+		this->ClientSize = System::Drawing::Size(412, 460);
+		this->Controls->Add(this->lblCustomKeyConfig);
+		this->Controls->Add(this->lblCustomScript);
+		this->Controls->Add(this->btnBrowseKeyconfig);
+		this->Controls->Add(this->btnBrowseScript);
+		this->Controls->Add(this->menuStrip1);
 		this->Controls->Add(this->cbKeyConfig);
 		this->Controls->Add(this->cbScripts);
 		this->Controls->Add(this->btnReloadConfig);
@@ -251,6 +372,7 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		this->Controls->Add(this->lblOutput);
 		this->Controls->Add(this->chkPause);
 		this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+		this->MainMenuStrip = this->menuStrip1;
 		this->MaximizeBox = false;
 		this->Name = L"MainForm";
 		this->Text = L"CKLua";
@@ -258,6 +380,8 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		this->Shown += gcnew System::EventHandler(this, &MainForm::MainForm_Shown);
 		this->SizeChanged += gcnew System::EventHandler(this, &MainForm::MainForm_SizeChanged);
 		this->menuTray->ResumeLayout(false);
+		this->menuStrip1->ResumeLayout(false);
+		this->menuStrip1->PerformLayout();
 		this->ResumeLayout(false);
 		this->PerformLayout();
 
@@ -345,7 +469,7 @@ private:
 	}
 	
 	// Update console on set interval
-	private: System::Void updateTimer_Tick(System::Object^  sender, System::EventArgs^  e) {
+	System::Void updateTimer_Tick(System::Object^  sender, System::EventArgs^  e) {
 		if (out->str() == "") return;
 		
 		// Silent?
@@ -359,12 +483,19 @@ private:
 		out->clear();
 		out->str("");
 	}
-	
-	
+
+	// Auto scroll text box
+	System::Void txtOutput_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+		txtOutput->SelectionStart = txtOutput->TextLength;
+	}
+
+	// Actually, is load
 	System::Void btnReloadScript_Click(System::Object^  sender, System::EventArgs^  e) {
+		lblCustomScript->Text = "";
 		loadSelectedScript();
 	}
 	System::Void btnReloadConfig_Click(System::Object^  sender, System::EventArgs^  e) {
+		lblCustomKeyConfig->Text = "";
 		loadSelectedKeymap();
 	}
 	
@@ -380,10 +511,16 @@ private:
 
 			this->ShowInTaskbar = false;
 			this->Hide();
+
+			changeInputDevice(true);
+			changeInputDevice(false);
 		}
 		else if (this->WindowState == FormWindowState::Normal) {
 			this->minimizeIcon->Visible = false;
 			this->ShowInTaskbar = true;
+			
+			changeInputDevice(true);
+			changeInputDevice(false);
 		}
 	}
 	System::Void minimizeIcon_DoubleClick(System::Object^  sender, System::EventArgs^  e) {
@@ -421,5 +558,65 @@ private:
 		fileName = String::Concat(fileName, sender->ToString());
 
 		lua->changeScript(msclr::interop::marshal_as<std::string>(fileName));
+	}
+	
+	System::Void scriptOpenEventHandler(System::Object^  sender, System::EventArgs^  e) {
+		openFile(L"Lua Files (*.lua)|*.lua");
+	}
+
+	System::Void keyConfigOpenEventHandler(System::Object^  sender, System::EventArgs^  e) {
+		openFile(L"Keymap Files (*.keyconf)|*.keyconf");
+	}
+
+	System::Void fileOpenEventHandler(System::Object^  sender, System::EventArgs^  e) {
+		openFile(L"Lua Files (*.lua)|*.lua|Keymap Files (*.keyconf)|*.keyconf");
+	}
+
+	void openFile(String^ filter) {
+		OpenFileDialog^ fileDialog = gcnew OpenFileDialog();
+		fileDialog->Filter = filter;
+
+		if (fileDialog->ShowDialog() == ::System::Windows::Forms::DialogResult::OK) {
+			std::string fileNameU = msclr::interop::marshal_as<std::string>(fileDialog->FileName->ToUpper());
+			std::string fileName = msclr::interop::marshal_as<std::string>(fileDialog->FileName);
+
+
+			if (fileNameU.find(".LUA") <= fileNameU.size()) {
+				String^ s = String::Concat(L"Custom: ", gcnew String(fileName.c_str()));
+				if (s->Length >= 40) {
+					s = s->Substring(s->Length - 40);
+					s = String::Concat("Custom: ...", s);
+				}
+				
+				lblCustomScript->Text = s;
+				lua->changeScript(fileName);
+			}
+			else if (fileNameU.find(".KEYCONF") <= fileNameU.size()) {
+				String^ s = String::Concat(L"Custom: ", gcnew String(fileName.c_str()));
+				if (s->Length >= 40) {
+					s = s->Substring(s->Length - 40);
+					s = String::Concat("Custom: ...", s);
+				}
+
+				lblCustomKeyConfig->Text = s;
+				lua->changeKeyConfig(fileName);
+			}
+		}
+	}
+
+
+	void changeInputDevice(bool remove) {
+		RAWINPUTDEVICE device;
+		device.usUsagePage = 0x01;
+		device.usUsage = 0x06;
+		if (remove)
+			device.dwFlags = RIDEV_REMOVE;
+		else
+			device.dwFlags = RIDEV_INPUTSINK;
+		
+		device.hwndTarget = (HWND) this->Handle.ToPointer();
+		if (RegisterRawInputDevices(&device, 1, sizeof(device)) == FALSE){
+			std::cout << GetLastError() << std::endl;
+		}
 	}
 };

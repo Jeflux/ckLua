@@ -11,7 +11,7 @@ function create()
 	excludekeys = {}
 	excludekeys["space"] = true
 
-	heatmap = {}    
+	heatmap = {}
     for x=0,21 do
 		heatmap[x] = {}
         for y=0,6 do
@@ -79,6 +79,7 @@ function update(dt)
 end
 
 function keyDown(vkcode, x, y, key)
+print(key)
 	if excludekeys[key] == true then return end
 
 	local xx = math.floor(x + 0.5)
