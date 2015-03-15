@@ -79,6 +79,8 @@ private: System::Windows::Forms::Button^				btnBrowseScript;
 private: System::Windows::Forms::Button^				btnBrowseKeyconfig;
 private: System::Windows::Forms::Label^					lblCustomScript;
 private: System::Windows::Forms::Label^					lblCustomKeyConfig;
+private: System::Windows::Forms::ToolStripMenuItem^  helpToolStripMenuItem;
+private: System::Windows::Forms::ToolStripMenuItem^  luaCallbacksToolStripMenuItem;
 private: System::Windows::Forms::Timer^					updateTimer;
 
 	// Initialize components
@@ -110,6 +112,8 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		this->btnBrowseKeyconfig = (gcnew System::Windows::Forms::Button());
 		this->lblCustomScript = (gcnew System::Windows::Forms::Label());
 		this->lblCustomKeyConfig = (gcnew System::Windows::Forms::Label());
+		this->helpToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+		this->luaCallbacksToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 		this->menuTray->SuspendLayout();
 		this->menuStrip1->SuspendLayout();
 		this->SuspendLayout();
@@ -225,30 +229,30 @@ private: System::Windows::Forms::Timer^					updateTimer;
 				this->notifyScriptMenu, this->toolStripSeparator1, this->exitToolStripMenuItem
 		});
 		this->menuTray->Name = L"menuTray";
-		this->menuTray->Size = System::Drawing::Size(153, 98);
+		this->menuTray->Size = System::Drawing::Size(139, 76);
 		// 
 		// restoreToolStripMenuItem
 		// 
 		this->restoreToolStripMenuItem->Name = L"restoreToolStripMenuItem";
-		this->restoreToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+		this->restoreToolStripMenuItem->Size = System::Drawing::Size(138, 22);
 		this->restoreToolStripMenuItem->Text = L"Restore";
 		this->restoreToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::restoreToolStripMenuItem_Click);
 		// 
 		// notifyScriptMenu
 		// 
 		this->notifyScriptMenu->Name = L"notifyScriptMenu";
-		this->notifyScriptMenu->Size = System::Drawing::Size(152, 22);
+		this->notifyScriptMenu->Size = System::Drawing::Size(138, 22);
 		this->notifyScriptMenu->Text = L"Change Script";
 		// 
 		// toolStripSeparator1
 		// 
 		this->toolStripSeparator1->Name = L"toolStripSeparator1";
-		this->toolStripSeparator1->Size = System::Drawing::Size(149, 6);
+		this->toolStripSeparator1->Size = System::Drawing::Size(135, 6);
 		// 
 		// exitToolStripMenuItem
 		// 
 		this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-		this->exitToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+		this->exitToolStripMenuItem->Size = System::Drawing::Size(138, 22);
 		this->exitToolStripMenuItem->Text = L"Exit";
 		this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::exitEventHandler);
 		// 
@@ -261,7 +265,10 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		// 
 		// menuStrip1
 		// 
-		this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileToolStripMenuItem });
+		this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->fileToolStripMenuItem,
+				this->helpToolStripMenuItem
+		});
 		this->menuStrip1->Location = System::Drawing::Point(0, 0);
 		this->menuStrip1->Name = L"menuStrip1";
 		this->menuStrip1->Size = System::Drawing::Size(412, 24);
@@ -334,6 +341,20 @@ private: System::Windows::Forms::Timer^					updateTimer;
 		this->lblCustomKeyConfig->Name = L"lblCustomKeyConfig";
 		this->lblCustomKeyConfig->Size = System::Drawing::Size(0, 13);
 		this->lblCustomKeyConfig->TabIndex = 18;
+		// 
+		// helpToolStripMenuItem
+		// 
+		this->helpToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->luaCallbacksToolStripMenuItem });
+		this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
+		this->helpToolStripMenuItem->Size = System::Drawing::Size(41, 20);
+		this->helpToolStripMenuItem->Text = L"Help";
+		// 
+		// luaCallbacksToolStripMenuItem
+		// 
+		this->luaCallbacksToolStripMenuItem->Name = L"luaCallbacksToolStripMenuItem";
+		this->luaCallbacksToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+		this->luaCallbacksToolStripMenuItem->Text = L"Lua callbacks";
+		this->luaCallbacksToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::luaCallbacksToolStripMenuItem_Click);
 		// 
 		// MainForm
 		// 
@@ -611,5 +632,14 @@ private:
 		if (RegisterRawInputDevices(&device, 1, sizeof(device)) == FALSE){
 			//std::cout << GetLastError() << std::endl;
 		}
+	}
+
+	// Show information about lua
+	System::Void luaCallbacksToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		MessageBox::Show("Available callbacks in Lua scripts are:\
+						 			\n\tsetLed(key, r, g, b) - sets key with name <key> to color RGB\
+									\n\tsetLed(x, y, r, g, b) - sets key at x, y to color RGB\
+									\n\tloadKeymap(keymap) - loads keymap with name <keymap>\
+									\n\tloadScript(script) - loads script with name <script>", "Lua callbacks");
 	}
 };

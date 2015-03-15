@@ -28,7 +28,7 @@ function create()
 
     balls = {}
 
-    rainbow = require("scripts/modules/rainbow"):new()
+    rainbow = require("scripts/modules/rainbow")
     rainbow:create()
 end
 
@@ -116,37 +116,6 @@ end
 
 
 function keyDown(vkcode, x, y, key)
-	local vkhex = string.format("%02x", vkcode)
-	vkhex = string.upper(vkhex)
-
-	--print("0x"..vkhex .. " " .. key .. " was pressed. Corresponds to " .. x .. ":" .. y)
-
-    --print(x, y)
-
-	--setLed(x, y, 255, 255, 255)
-
-	--[[if key == "f4" or key == "f5" then
-		print("Reloading script and keymap")
-		loadKeymap("keymaps/sv_keymap.keyconf")
-		loadScript("scripts/test.lua")
-	end]]--
-
-    if x >= 0 and x <= 21 and y >= 0 and y <= 6 then
-        local r = 1.25
-        for i = 1, 360 do
-            local angle = i * math.pi / 180
-            local ptx, pty = x + r * math.cos( angle ), y + r * math.sin( angle )
-            ptx = math.floor(ptx + 0.5)
-            pty = math.floor(pty + 0.5)
-
-            if ptx >= 0 and pty >= 0 and ptx <= 21 and pty <= 6 then
-                --typeleds[ptx][pty].r = 0
-                --typeleds[ptx][pty].g = 0
-                --typeleds[ptx][pty].b = 0
-            end
-        end
-    end
-
     x = math.floor(x + 0.5)
     y = math.floor(y + 0.5)
     if x >= 0 and x <= 22 and y >= 0 and y <= 6 then
@@ -154,9 +123,6 @@ function keyDown(vkcode, x, y, key)
         typeleds[x][y].g = 0
         typeleds[x][y].b = 0
     end
-
-
-
 end
 
 function keyUp(x, y, key)

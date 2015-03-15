@@ -1,7 +1,7 @@
 // This line is a comment
 /*
 	These lines are multi line comments
-	":" describes name of keys
+	":" describes name of keys (optional)
 	";" describes width of keys
 	"{ 0xFF, 0xFF }," maps virtual key 0xFF to corsair keycode 0xFF for lighting
 */
