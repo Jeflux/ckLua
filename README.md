@@ -17,6 +17,8 @@ The program uses C++/CLI. So you need to compile with /clr and /SUBSYSTEM:WINDOW
 
 As mentioned by Palmr, you may have to install drivers for libusb to get this program to work. See here for information on how to set up the libusb drivers for windows: https://github.com/libusb/libusb/wiki/Windows#Driver_Installation.
 
+A pre-built binary can be found [here](https://github.com/Jeflux/ckLua/blob/master/_misc/ckLuaBin.zip).
+
 ## Disclaimer
 I am not responsible for any third party scripts used in conjunction with this application. By using this application with scripts from untrusted sources you are potentially running the risk of having a keylogger on your system, as with any application that reads hardware input.
 
