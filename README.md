@@ -1,5 +1,5 @@
 # ckLua
-Lua scripting for Corsair's RGB keyboards for Windows. *Note that this program only works for firmware versions lower than 1.20*
+Lua scripting for Corsair's RGB keyboards for Windows. *Note that this program only works when 16.8m colors are disabled in CUE*
 
 ## How it works
 By using the Windows API messages sent from the keyboard are intercepted and read. Keys are mapped to strings (optional) and lighting codes. This information is passed directly to loaded Lua script.
