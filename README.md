@@ -1,5 +1,5 @@
 # ckLua
-Lua scripting for Corsair's RGB keyboards for Windows. *Note that this program only works when 16.8m colors are disabled in CUE*
+Lua scripting for Corsair's RGB keyboards for Windows. *Note that this program only works with 16.8m colors disabled in CUE*
 
 ## How it works
 By using the Windows API messages sent from the keyboard are intercepted and read. Keys are mapped to strings (optional) and lighting codes. This information is passed directly to loaded Lua script.
@@ -17,7 +17,7 @@ The program uses C++/CLI. So you need to compile with /clr and /SUBSYSTEM:WINDOW
 
 As mentioned by Palmr, you may have to install drivers for libusb to get this program to work. See here for information on how to set up the libusb drivers for windows: https://github.com/libusb/libusb/wiki/Windows#Driver_Installation.
 
-A pre-built binary can be found [here](https://github.com/Jeflux/ckLua/blob/master/_misc/ckLuaBin.zip).
+A pre-built binary of the program can be found [here](https://github.com/Jeflux/ckLua/blob/master/_misc/ckLuaBin.zip).
 
 ## Disclaimer
 I am not responsible for any third party scripts used in conjunction with this application. By using this application with scripts from untrusted sources you are potentially running the risk of having a keylogger on your system, as with any application that reads hardware input.
