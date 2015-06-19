@@ -112,9 +112,17 @@ void InputListener::interceptMessage(MSG& msg) {
 		else if (key == 0x2A && raw->data.keyboard.MakeCode == 0x36)
 			key = 0xFC;
 		
+		// Convert to upper case
+		int i = 0;
+		wchar_t c;
+		while (wcDeviceName[i]) {
+			c = wcDeviceName[i];
+			putwchar(towupper(c));
+			i++;
+		}
 
 		// Check if corsair keyboard and keys are valid
-		if (std::wcsncmp(wcDeviceName, L"\\\\?\\HID#Vid_1B1C&Pid_1B13&MI_01", 31) == 0 && key != 0x00 && key != 0xFF) {
+		if (std::wcsncmp(wcDeviceName, L"\\\\?\\HID#VID_1B1C&PID_1B13&MI_01", 31) == 0 && key != 0x00 && key != 0xFF) {
 
 			// Key down. Call function if key is pressed and not held
 			if (!(raw->data.keyboard.Flags & RI_KEY_BREAK) && !keyPressed[key]) {

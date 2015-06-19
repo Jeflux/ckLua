@@ -31,8 +31,8 @@ public:
 		loadSelectedScript();
 
 		System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MainForm::typeid));
-		this->Icon = gcnew System::Drawing::Icon(L"..\\icon.ico");
-		this->minimizeIcon->Icon = gcnew System::Drawing::Icon(L"..\\icon.ico");
+		this->Icon = gcnew System::Drawing::Icon(L"icon.ico");
+		this->minimizeIcon->Icon = gcnew System::Drawing::Icon(L"icon.ico");
 	}
 
 private:
