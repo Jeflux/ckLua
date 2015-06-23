@@ -17,7 +17,7 @@ This program uses the library from https://github.com/Palmr/LibCorsairRGB, and t
 ## How to use
 The program uses C++/CLI. So you need to compile with /clr and /SUBSYSTEM:WINDOWS flags. You also need to include libusb, LibCorsairRGB and Lua.
 
-As mentioned by Palmr, you may have to install drivers for libusb to get this program to work. See here for information on how to set up the libusb drivers for windows: https://github.com/libusb/libusb/wiki/Windows#Driver_Installation.
+As mentioned by Palmr, you might have to install drivers for libusb to get this program to work. Instructions on how to install libusb on windows can be found [here](https://github.com/libusb/libusb/wiki/Windows#Driver_Installation).
 
 ## Disclaimer
 I am not responsible for any third party scripts used in conjunction with this application. By using this application with scripts from untrusted sources you are potentially running the risk of having a keylogger on your system, as with any application that reads hardware input.
