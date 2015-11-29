@@ -32,7 +32,7 @@ function Rainbow:update(dt)
 			local g = (math.sin(f + t + 2) + 1) * 255 / 2
 			local b = (math.sin(f + t + 4) + 1) * 255 / 2
 
-			self.bgleds[x][y].r = r
+	    self.bgleds[x][y].r = r
             self.bgleds[x][y].g = g
             self.bgleds[x][y].b = b
 		end
